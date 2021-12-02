@@ -1,0 +1,882 @@
+---
+title: "An Introduction to R"
+author: "Earl Morales"
+date: "11/2/2021"
+output: html_document
+---
+
+# Introduction
+Use this R Markdown document to practice base R using [Intro to R](https://intro2r.com) as your primary text
+  - **Note:** Use  [An Introduction to R](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf) by *D. M. Smith* and *W. M. Venables* as a companion for additional insight into base R
+
+[Link to Intro to R exercises](https://alexd106.github.io/intro2R/exercises.html)
+
+[R-project Website](https://www.r-project.org)
+
+[R Manuals](https://cran.r-project.org/manuals.html)
+
+
+## Chapter 1
+Link to *Introduction to R* [Exercise 1](https://alexd106.github.io/intro2R/exercise_1.html)
+
+```{r exercise 1}
+
+# ==== Question 4 ====
+help('mean')
+help(mean)
+
+# ==== Question 5 ====
+plot(1:10)
+
+# ==== Question 6 ====
+first_num <- 42
+first_char <- "my first character"
+
+# ==== Question 7 ====
+rm(first_num)
+ls()
+
+# ==== Question 8 ====
+first_char <- "my second character"
+first_char
+
+# ==== Question 11 ====
+apropos('plot')
+help(boxplot) # Look up help file for 'boxplot' function
+
+# ==== Question 12 ====
+help.search('plot')
+help(help.search)
+help.search(keyword = "plot", package = "nlme")
+
+# ==== Question 13 ====
+getwd()
+
+# ==== Question 14 ====
+dir.create('data')
+dir.create('data/raw_data') # Subdirectory of raw data files within the 'data' directory
+dir.create('output')
+dir.create('output/figures') # Subdirectory within 'output' called 'figures' to store all R plots
+list.files() # List all files in current directory
+list.dirs(full.names = FALSE) # List all directories including subdirectories
+
+
+
+# Remove remaining objects / variables created in this exercise
+rm(first_char)
+```
+
+
+
+## Chapter 2
+```{r exercise 2}
+
+# ==== Question 2 ====
+log(x = 12.43)
+log10(x = 12.43)
+log(x = 12.43, base = exp(2))
+sqrt(x = 12.43)
+exp(12.43)
+
+
+# ==== Question 3 ====
+area_circle <- (pi * 10) ^ 2 # Area of circle 
+                             # with diameter of 20 cm
+area_circle
+
+
+# ==== Question 4 ====
+(14 * 0.51) ^ (1/3)
+
+
+# ==== Question 5 ====
+weights <- c(69, 62, 57, 59, 59, 64, 56, 66, 67, 66)
+weights
+# Weight of 10 children in kg
+
+
+# ==== Question 6 ====
+mean(x = weights)
+var(x = weights)
+sd(x = weights)
+range(x = weights)
+length(x = weights)
+
+first_five <- weights[1:5]
+first_five # Weights of first five children
+
+
+# ==== Question 7 ====
+height <- c(112, 102, 83, 84, 99, 90, 77, 112, 133, 112)
+height # Height of same 10 children in cm
+
+summary(height)
+
+some_child <- height[c(2, 3, 9, 10)] 
+some_child # Heights of 2nd, 3rd, 9th, and 10th child
+
+shorter_child <- height[height <= 99]
+shorter_child # Heights of children 99 cm or below
+
+
+# ==== Question 8 ====
+bmi <- (weights / ( (height / 100) ) ^ 2)
+bmi # BMI of each child; BMI is calculated in metric scale; Must convert centimeters into meters for BMI formula in metric scale
+
+
+# ==== Question 9 ====
+seq1 <- seq(from = 0, to = 1, by = 0.1)
+seq1 # sequence of numbers 0-1 in increments of 0.1
+
+
+# ==== Question 10 ====
+seq2 <- rev(seq(from = 1, to = 10, by = 0.5))
+
+
+# ==== Question 11 ====
+rep(x = c(1, 2, 3), times = 3)
+rep(x = c("a", "c", "e", "g"), each = 3)
+rep(x = c("a", "c", "e", "g"), times = 3)
+rep(x = c(1, 2, 3), each = 3, times = 2)
+rep(x = 1:5, times = 5:1)
+rep(x = c(7, 2, 8, 1), times = c(4, 3, 1, 5))
+
+
+# ==== Question 12 ====
+height_sorted <- sort(x = height)
+height_sorted
+
+height_sorted_desc <- sort(x = height, decreasing = TRUE)
+height_sorted_desc
+
+
+# ==== Question 13 ====
+child_names <- c("Alfred", "Barbara", "James", "Jane", "John", "Judy", "Louise", "Mary", "Ronald", "William")
+
+
+# ==== Question 14 ====
+names_sort <- child_names[order(height)]
+names_sort # Names of the children sorted by their height from shortest to tallest
+# Among all the children Louise is the shortest and Ronald is the tallest
+
+
+# ==== Question 15 ====
+weight_rev <- child_names[order(weights, decreasing = TRUE)]
+weight_rev
+# Alfred is the heaviest of all the children and Louise is the lightest
+
+
+# ==== Question 16 ====
+mydata <- c(2, 4, 1, 6, 8, 5, NA, 4, 7)
+mean(mydata) # Mean function returns NA
+mean(mydata, na.rm = TRUE) # Calculate the mean and ignore missing data in the vector
+
+# ==== Question 17 ====
+ls()
+objects()
+rm(seq1) # remove 'seq1' from workspace environment
+
+
+# Remove the remaining objects / variables created for Excercise 2 using R code
+rm(list = ls())
+```
+
+
+
+## Chapter 3
+```{r exercise 3}
+
+# ==== Question 5 ====
+whale <- read.table(file = "data/raw_data/whaledata.txt", header = TRUE, sep = '\t', stringsAsFactors = TRUE)
+
+
+# ==== Question 6 ====
+str(whale)
+# The 'whale' dataset contains 100 observations and 8 variables with 'month' and 'water.noise' being factor variables (character data without using  stringsAsFactors)
+
+
+# ==== Question 7 ====
+summary(whale)
+# 'number.whales' is the only variable in the dataset that has missing data with just one missing value
+
+
+# ==== Question 8 ====
+whale.sub <- whale[1:10, 1:4]
+whale.num <- whale[, c("month", "water.noise", "number.whales")]
+whale.may <- whale[whale$month == "May",] # Extract first 50 rows using conditional statement; can also use whale[1:50,]
+whale[-(1:10), -8]
+whale[-seq(from = 1, to = 10), -whale$gradient]
+# I prefer specifiying columns by name bc it does not require you to know the position of the column which is helpful if you are not referencing the original dataframe or if you know how the variable/column of interest is spelled
+
+
+# ==== Question 9 ====
+whale.deep <- subset(x = whale, subset = depth > 1200)
+whale.steep <- whale[whale$gradient > 200, ]
+whale.noise.low <- whale[whale$water.noise == "low", ]
+whale.may.noise.high <- subset(x = whale, subset = (water.noise == "high" & month == "May"))
+whale.oct.low.grad <- whale[whale$month == "October" & whale$water.noise == "low" & whale$gradient > median(whale$gradient), ]
+whale.lat.long <- whale[(whale$latitude >= 60.0 & whale$latitude <= 61.0) & (whale$longitude >= -6.0 & whale$longitude <= -4.0), ]
+whale.not.medium <- subset(x = whale, subset = water.noise != "medium")
+
+
+# ==== Question 10 ====
+whale.oct.low.grad <- whale[whale$month == "October" & whale$water.noise == "low" & whale$gradient > median(whale$gradient), ]
+# Alternate method is to hard code the value 132 for gradient condition, i.e., whale$gradient > 132, though this is useful if median is unknown
+
+
+# ==== Question 11 ====
+subset(x = whale, subset = depth > 1500 & number.whales > mean(number.whales))
+# ^ This method outputs 0 results/rows
+
+whale[whale$depth > 1500 & whale$number.whales > mean(whale$number.whales), ]
+# ^ This method yields 13 rows of NAs for every column/variable
+
+# The cause of this problem may lie in the second logical condition since mean(whale$number.whales) produces an NA value due to missing data, albeit 1 instance, in the number.whales column. This issue can be solved with the 'na.rm' argument
+subset(x = whale, subset = depth > 1500 & number.whales > mean(number.whales, na.rm = TRUE))
+
+
+# ==== Question 12 ====
+subset(x = whale, subset = (month == "May" & time.at.station < 1000 & depth > 1000))
+
+subset(x = whale, subset = (month == "October" & latitude > 61), select = c("month", "latitude", "longitude", "number.whales"))
+
+
+# ==== Question 13 ====
+whale.depth.sort <- whale[order(whale$depth),]
+# Order 'whale' dataframe by depth in ascending order
+
+
+# ==== Question 14 ====
+whale.depth.noise <- whale[order(-whale$depth, whale$water.noise), ]
+
+
+# ==== Question 15 ====
+tapply(X = whale$number.whales, INDEX = whale$water.noise, FUN = mean)
+
+tapply(X = whale$number.whales, INDEX = whale$water.noise, FUN = mean, na.rm = TRUE)
+
+tapply(X = whale$number.whales, INDEX = list(whale$water.noise, whale$month), FUN = median, na.rm = TRUE)
+
+with(data = whale, expr = tapply(X = number.whales, INDEX = list(water.noise, month), FUN = median, na.rm = TRUE))
+# Alternative approach using with()
+
+
+# ==== Question 16 ====
+aggregate(x = whale[, c("time.at.station", "number.whales", "depth", "gradient")], by = list(water.noise = whale$water.noise), FUN = mean)
+
+aggregate(x = whale[, c("time.at.station", "number.whales", "depth", "gradient")], by = list(water.noise = whale$water.noise, month = whale$month), FUN = mean)
+
+mean.agg.table1 <- aggregate(cbind(time.at.station, number.whales, depth, gradient) ~ water.noise + month, data = whale, FUN = mean)
+# Using the formula syntax for aggregate() ignores NAs for the applied function (mean in this case)
+
+round(mean.agg.table1[, 3:length(mean.agg.table1)],
+      digits = 2)
+# Round the mean values to 2 decimal places
+
+# Alternative method to round mean values without creating an additional R object / dataframe; specify and define a function as an argument within aggregate()
+aggregate(whale[, c(2, 4, 7, 8)], by = list(water.noise = whale$water.noise, month = whale$month), function(x) {
+    round(mean(x, na.rm = TRUE), digits = 2)
+})
+
+
+# ==== Question 17 ====
+table(whale$water.noise)
+
+with(data = whale, expr = table(list(water.noise, month)))
+
+table(whale$water.noise, whale$month)
+
+# Flatten the contingency table for cleanliness
+ftable(xtabs(formula = ~ water.noise + month, data = whale))
+
+# ==== Question 18 ====
+write.table(x = whale.num, file = "output/whale_num.txt", sep = '\t', row.names = FALSE, col.names = TRUE)
+
+
+# Remove all R objects created during Exercise 3
+rm(list = ls())
+```
+
+
+
+## Chapter 4
+```{r exercise 4}
+
+# ==== Question 4 ====
+squid <- read.table(file = "data/raw_data/squid1.txt", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+str(squid)
+summary(squid)
+# There are 519 observations/rows and 13 variables/columns in this dataset
+
+squid[, c("year", "month", "maturity.stage")] <- lapply(X = squid[, c("year", "month", "maturity.stage")], FUN = factor)
+
+str(squid[, c("year", "month", "maturity.stage")])
+# Variables successfully converted to factors via lapply function
+
+
+# ==== Question 5 ====
+xtabs(formula = ~ month + year, data = squid)
+with(squid, table(month, year))
+# No we don't have data for each month in each year; 1990 has the most observations
+
+ftable(xtabs(formula = ~ month + year + maturity.stage, data = squid))
+
+
+# ==== Question 6 ====
+
+# Direct page of cleveland dot charts to PDF graphics device
+pdf(file = 'output/figures/clevdotplot_ex4.pdf')
+
+par(mfrow = c(2, 2)) # set parameters for 2 X 2 matrix of plots
+dotchart(squid$DML, xlab = "Dorsal Mantle Length")
+dotchart(squid$weight, xlab = "Squid Weight")
+dotchart(squid$nid.length, xlab = "Nidamental Gland Length")
+dotchart(squid$ovary.weight, xlab = "Gonad Weight")
+# Only 'Nidamentla Gland Length' (nid.length) contains an obvious outlier--an unusually large observation; though 'Gonad Weight' (ovary.weight) contains some potential outliers, i.e., unusually large observations
+
+# Close PDF graphics device (redirect plot back to R)
+dev.off()
+
+
+# ==== Question 7 ====
+
+# Which nid.length value is over 400 (an outlier)?
+which(x = squid$nid.length > 400)
+squid$nid.length[11] # Check actual value of outlier
+
+# Assign 43.2 to 11th nid.length observation
+squid$nid.length[11] <- 43.2
+dotchart(x = squid$nid.length)
+
+
+# ==== Question 8 ====
+
+# Histogram of DML using Sturges algorithm for breaks/bins
+hist(x = squid$DML, xlab = "Dorsal Mantle Length", main = "Histogram of Squid DML")
+
+hist(x = squid$DML, breaks = "Scott", xlab = "Dorsal Mantle Length", main = "Histogram of Squid DML") # Using Scott algorithm for breaks
+
+hist(x = squid$DML, breaks = "FD", xlab = "Dorsal Mantle Length", main = "Histogram of Squid DML") # Using FD / Freedman-Diaconis algorithm; FD method captures same overall distrubtion but w/ more detail and potential outliers can also be seen
+
+
+# Switch graphics device to pdf and create export to pdf
+pdf(file = 'output/figures/hist_ex4.pdf')
+
+# Set graphics parameters for 2 x 2 page of plots
+par(mfrow = c(2, 2))
+hist(x = squid$DML, breaks = "FD", xlab = "Dorsal Mantle Length", main = "Histogram of Squid DML")
+hist(x = squid$weight, xlab = "Weight", main = "Histogram of Squid Weight")
+hist(x = squid$eviscerate.weight, xlab = "Eviscerated Weight", main = "Histogram of Eviscerated Squid Weight")
+hist(x = squid$ovary.weight, xlab = "Gonad Weight", main = "Histogram of Squid Gonad Weight")
+
+# Turn off pdf graphics device
+dev.off()
+
+
+# ==== Question 9 ====
+
+# Switch graphics device and export to pdf
+pdf(file = "output/figures/scatter_ex4.pdf")
+
+# Set parameters to place plots on single page
+par(mfrow = c(2,2))
+
+# Scatterplot weight vs DML
+with(data = squid, 
+     expr = plot(x = DML, y = weight, xlab = "Dorsal Mantle Length", ylab = "Weight", main = "Squid Weight against DML", bty = 'l'))
+# The relationship between DML and weight is positive with a slight exponential, nonlinear curve shape
+
+# Scatterplot with weight transformed on log-scale
+plot(x = squid$DML, y = log(squid$weight), xlab = "Dorsal Mantle Weight", ylab = "Weight", main = "Logarithmic Squid Weight vs DML", bty = 'l')
+# Relationship apppears more linear
+
+# Scatterplot with square root transformation on weight
+plot(x = squid$DML, y = sqrt(squid$weight), xlab = "Dorsal Mantle Weight", ylab = "Weight", main = "Square Root of Squid Weight vs DML", bty = 'l')
+# Square root transformation produces the most linear relationship
+
+# Make new variables in dataset for transformed weight 
+# squid$log.weight <- log(squid$weight)
+# squid$sqrt.weight <- sqrt(squid$weight)
+
+# Turn off pdf graphics device
+dev.off()
+
+
+# ==== Question 10 ====
+boxplot(formula = DML ~ maturity.stage, data = squid, xlab = "Squid Maturity Stage", ylab = "Dorsal Mantle Length")
+
+vioplot::vioplot(formula = DML ~ maturity.stage, data = squid, xlab = "Squid Maturity Stage", ylab = "Dorsal Mantle Length", col = "pink")
+
+
+# ==== Question 11 ====
+coplot(formula = sqrt(weight) ~ DML | maturity.stage, data = squid)
+# The relationship between DML and weight seems to differ most in the first 3 leves of maturity stage (if reading left to right starting at bottom row); weight seems to increase as DML and maturity stage increase
+
+lattice::xyplot(x = sqrt(weight) ~ DML | maturity.stage, data = squid, xlab = "Dorsal Mantle Length", ylab = expression(sqrt(weight)), main = "Squid Weight against DML by Maturity Stage")
+
+
+# ==== Question 12 ====
+
+# Define a function to produce histograms along specified panels in pairs plots
+panel.hist <- function(x, ...)
+{
+    usr <- par("usr"); on.exit(par(usr))
+    par(usr = c(usr[1:2], 0, 1.5) )
+    h <- hist(x, plot = FALSE)
+    breaks <- h$breaks; nB <- length(breaks)
+    y <- h$counts; y <- y/max(y)
+    rect(breaks[-nB], 0, breaks[-1], y, col = "orange")
+}
+
+# Define function to display correlation coefficients within specified panels of pairs plot
+panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor)
+{
+    usr <- par("usr"); on.exit(par(usr))
+    par(usr = c(0, 1, 0, 1))
+    r <- abs(cor(x, y))
+    txt <- format(c(r, 0.123456789), digits = digits)[1]
+    txt <- paste0(prefix, txt)
+    if(missing(cex.cor)) cex.cor <- 0.8/strwidth(txt)
+    text(0.5, 0.5, txt, cex = cex.cor * r)
+}
+
+pairs(formula = ~ DML + weight + eviscerate.weight + ovary.weight + nid.length + nid.weight, 
+      data = squid,
+      panel = panel.smooth,
+      diag.panel = panel.hist,
+      upper.panel = panel.cor)
+
+
+# ==== Question 13 ====
+
+# Create scatterplots w/ various transformations
+plot(x = squid$DML, y = squid$ovary.weight)
+plot(x = squid$DML, y = log(squid$ovary.weight))
+plot(x = squid$DML, y = sqrt(squid$ovary.weight))
+
+# Set graphics parameters
+par(mar = c(4.1, 4.4, 4.1, 1.9), xaxs = "i", yaxs = "i")
+
+# Make first layer of plot w/o data points
+plot(x = squid$DML, y = squid$ovary.weight,
+     type = "n",
+     bty = "l",
+     xlab = "Dorsal Mantle Length",
+     ylab = "Gonad Weight",
+     xlim = c(0, 400),
+     ylim = c(0, 60),
+     las = 1, cex.axis = 0.8, tcl = -0.2)
+
+# Color data points for each level of maturity stage
+points(x = squid$DML[squid$maturity.stage == "1"],
+       y = squid$ovary.weight[squid$maturity.stage == "1"],
+       pch = 16, col = "cyan")
+points(x = squid$DML[squid$maturity.stage == "2"],
+       y = squid$ovary.weight[squid$maturity.stage == "2"],
+       pch = 16, col = "orange")
+points(x = squid$DML[squid$maturity.stage == "3"],
+       y = squid$ovary.weight[squid$maturity.stage == "3"],
+       pch = 16, col = "green")
+points(x = squid$DML[squid$maturity.stage == "4"],
+       y = squid$ovary.weight[squid$maturity.stage == "4"],
+       pch = 16, col = "yellow")
+points(x = squid$DML[squid$maturity.stage == "5"],
+       y = squid$ovary.weight[squid$maturity.stage == "5"],
+       pch = 16, col = "pink")
+
+# Produce legend explaining different data point colors
+legend(x = 1, y = 60,
+       col = c("cyan", "orange", "green", "yellow", "pink"),
+       pch = c(16, 16, 16, 16, 16), bty = "n",
+       title = "Maturity Stage",
+       legend = levels(squid$maturity.stage))
+# LEGEND DOES NOT DISPLAY PROPERLY -> not all legend labels are shown, legend box is extremely big, and there are large spaces between legend labels
+
+
+# Remove all objects created in Exercise 4
+rm(list = ls())
+```
+
+
+
+## Chapter 5
+- Ch.5 has the same exact exercise questions as Ch.4; thus, use ggplot instead of base R or lattice to complete exercise 
+**Note**: The online book refers to **ggplot2** exercise 4 as  *Exercise 5* based on  book chapter listing 
+```{r exercise 4 ggplot}
+# Read through Ch.5 before starting Exercise 5
+# Can skip Ch.5 for now and return another time
+
+```
+
+
+
+## Chapter 6
+```{r exercise 5}
+
+# ==== Question 1 ====
+
+prawn <- read.csv(file = "data/raw_data/prawnGR.CSV", header = TRUE)
+
+# Convert 'diet' variable into a factor type
+prawn$diet <- factor(prawn$diet)
+
+summary(prawn)
+# There are 30 observations in each diet treatment; the data is symmetrical in diet treatment
+
+
+# ==== Question 2 ====
+
+shapiro.test(x = prawn$GRate[prawn$diet == "Natural"])
+shapiro.test(x = prawn$GRate[prawn$diet == "Artificial"])
+# p-value > 0.05 so we cannot reject he null hypothesis that the data is normally distributed; therefore normality assumption holds
+
+var.test(x = (prawn$diet == "Natural"), y = prawn$GRate)
+var.test(x = (prawn$diet == "Artificial"), y = prawn$GRate)
+# p-value < 0.05 therefore we can reject the null hypothesis; equal variance (homoscedacity) assumption does not hold
+
+
+# ==== Question 3 ====
+
+# Welch Two Sample t-test; prawn growth rate described by prawn diet
+t.test(formula = prawn$GRate ~ prawn$diet, var.equal = TRUE)
+# Null Hypothesis: The true mean (mu) of the data is equal to 0, i.e., the data comes from the same distribution / distributions with the same mean value
+# t-statistics = -1.325; degrees of freedom = 58; p-value = 0.1900818
+
+# I would summarize these statistics with a table and briefly describe what they mean
+data.frame(t.stat = t.test(formula = prawn$GRate ~ prawn$diet, var.equal = TRUE)[1],
+           df = t.test(formula = prawn$GRate ~ prawn$diet, var.equal = TRUE)[2],
+           pvalue = t.test(formula = prawn$GRate ~ prawn$diet, var.equal = TRUE)[3])
+
+
+# ==== Question 4 ====
+GRate.lm <- lm(forumla = GRate ~ diet, data = prawn)
+
+
+# ==== Question 5 ====
+anova(object = GRate.lm)
+# F statistic = 1.7579; degrees of freedom = 1, df = 58 for residuals (similar to two sample t-test)
+
+# I would summarize these statistics with a table and briefly describe what they mean in the context of the experiment
+
+anova(object = GRate.lm)[[5]][1]
+t.test(formula = prawn$GRate ~ prawn$diet, var.equal = TRUE)$p.value
+# The p values from the F-test (ANOVA) and the two sample t-test are similar
+
+
+# ==== Question 6 ====
+
+# Set graphing parameter to 2 x 2 page setup
+par(mfrow = c(2,2))
+
+plot(GRate.lm)
+# It appears that is heteroscadacity (unequal variance) in our data thus violating the homogeneity of variance assumption; thus, the results of the F-test for variance maintains
+# The data seems to be normally distributed since the data points fit tightly on the Q-Q plot line
+
+
+# ==== Question 7 ====
+gigartina <- read.csv(file = "data/raw_data/Gigartina.CSV")
+
+# Convert 'diatom.treat' from character to factor
+gigartina$diatom.treat <- factor(gigartina$diatom.treat)
+
+str(gigartina)
+summary(gigartina$diatom.treat)
+# There are 10 replicates per diatom treatment
+
+# Boxplot of gigartina diameter by diatom treatment
+boxplot(formula = gigartina$diameter ~ gigartina$diatom.treat,
+        ylab = "Diameter",
+        xlab = "Diatom Culture Treatment",
+        main = "Red Algae Spores Diameter by Treatment Group")
+
+# Cleveland dot plot of diameter by treatment grouop
+dotchart(x = gigartina$diameter, 
+         groups = gigartina$diatom.treat,
+         xlab = "Diameter",
+         lcolor = "red")
+# Groups from bottom to top: ASGM-Sstat
+# ASGM has the greatest diameter values and variance based on its median and IQR; Sexpo and Sstat groups have the smallest variance contain a single outlier; The median diameter value for Sdecl is slightly above Sstat group's median
+
+
+# ==== Question 8 ====
+# Null hypothesis: The population mean (true mean, i.e., mu) of all treatment groups is 0
+# mu_1 = mu_2 = mu_3 = mu_4 = 0
+
+
+# ==== Question 9 ====
+gigartina.lm <- lm(formula = diameter ~ diatom.treat, data = gigartina)
+
+
+# ==== Question 10 ====
+anova(object = gigartina.lm)
+
+# p-value of F-stat
+anova(object = gigartina.lm)[[5]][1]
+# p-value < 0.05 so we reject the null hypothesis
+# F-statistics = 22.775; df = 3 for 'diatom.treat' and df = 36 for residuals
+# I would report the summary stats in a table and describe them in the context of this experimental study
+
+
+# ==== Question 11 ====
+
+par(mfrow = c(2, 2))
+plot(gigartina.lm)
+# This is not an acceptable model bc normality assumption and homoscedastic variance assumption are violated
+
+
+# ==== Question 13 ====
+#install.packages(pkgs = "mosaic")
+#library(mosaic)
+
+# TukeyHSD.lm does not exist; TukeyHSD is used instead
+
+TukeyHSD(x = gigartina.lm)
+# Using alpha = 0.05 we see that Sdecl-ASGM, Sexpo-ASGM, Sstat-ASGM, and Sstat-Sexpo groups are different from each other since their p-values are less than 0.05
+
+
+# ==== Question 14 ====
+plot(TukeyHSD(x = gigartina.lm))
+# The plot reflects the difference values from the Tukey HSD table
+
+
+# ==== Question 15 ====
+temora <- read.csv(file = "data/raw_data/TemoraBR.CSV")
+
+str(temora)
+# There 3 variables in the dataset (2 numeric and 1 integer)
+# 'temp' and 'acclimitisation_temp' are explanatory (independent) variables
+# 'beat_rate' is the response (dependent) variable
+
+
+# ==== Question 16 ====
+# 'acclimitisation_temp' is an integer variable in its raw form
+
+# convert 'acclimitisation_temp' to factor type and store in new column/variable
+temora$Facclimitisation_temp <- factor(temora$acclimitisation_temp)
+
+# Conditional plot of beat rate vs temperature by acclimitisation temperature
+coplot(formula = beat_rate ~ temp | Facclimitisation_temp, data = temora)
+# It appears beat rate is greater at lower acclimitisation temps but overall the data reflects a positive relationship
+
+#lattice::xyplot(x = beat_rate ~ temp | Facclimitisation_temp, data = temora)
+
+
+# ==== Question 17 ====
+# I think the relationship between beat_rate and temp is moderately different at lower acclimitisation temps
+
+
+# ==== Question 18 ====
+# lm(formula = beat_rate ~ temp + Facclimitisation_temp + temp:Facclimitisation_temp, data = temora)
+
+temora.lm <- lm(formula = beat_rate ~ temp * Facclimitisation_temp, data = temora)
+
+
+# ==== Question 19 ====
+anova(temora.lm)
+summary(temora.lm)
+# It appears the interaction between 'temp' and 'Facclimitisation_temp' is significant specifically at 'Facclimitisation_temp' level 20
+# Interaction term interpretation: The effect of temperature on beat rate varies for different levels (values) of acclimitisation temperature
+# We should only interpret main effect of 'temp' since it is the only significant main effect
+
+# ==== Question 20 ====
+
+# 2 x 2 page setup for plots
+par(mfrow = c(2, 2))
+plot(temora.lm)
+# Based on the diagnostic plots it seems homoscedasticity assumption and normality assumption, though generously, holds
+
+shapiro.test(x = temora$beat_rate)
+# At alpha level 0.05 it seems beat_rate has a normal distribution (p-value < 0.05)
+
+
+# ==== Question 21 ====
+summary(temora.lm)
+# F-statistic: 224.9 on 5 and 39 DF,  p-value: < 2.2e-16 for main effect of temperature; t-statistic for 'temp' is 18.919
+
+
+# ==== Question 22 ====
+
+# New ANOVA model w/ square root transformation of response variable
+temora.lm.sqrt <- lm(formula = sqrt(beat_rate) ~ temp * Facclimitisation_temp, data = temora)
+
+summary(temora.lm.sqrt)
+# After transforming beat rate it appears 'Facclimitisation_temp' at level 20 is significant at 0.1 alpha level and the mixed effect of 'temp' and 'Facclimitisation_temp' at level 20 is now significant at 0.05 alpha level instead of 0.01 in the original model
+# The model interpretation changes slightly after the transformation
+
+# Conditional plot of beat rate vs temperature by acclimitisation temperature using new refitted model
+coplot(formula = sqrt(beat_rate) ~ temp | Facclimitisation_temp, data = temora)
+
+# Diagnostic plots of refitted model
+par(mfrow = c(2,2))
+plot(temora.lm.sqrt)
+# Yes the validation plots of the residuals look better and the 'beat_rate' appears to display more normality after the transformation
+
+
+# Remove all objects created Exercise 5
+rm(list = ls())
+
+```
+
+
+
+## Chapter 7
+- **Note**: *Exercise 6* is listed as *Exercise 7* in the online book
+```{r exercise 6}
+
+# ==== Question 1 ====
+
+# Area of circle = (pi * radius) ^ 2
+area_circle <- function(radius) { return( (pi * radius)^2 ) }
+
+identical(x = (pi * (3.4/2))^2, y = area_circle(1.7)) # Function works properly
+
+area_circle(c(1.7, 2.1, 3.2))
+# This function can be used on a vector of data
+
+
+# ==== Question 2 ====
+
+# Fahrenheit to Centegrade conversion: (C = (F - 32) x 5/9)
+far_to_cen <- function(temp) {
+  
+  centigrade <- (temp - 32) * 5 / 9
+  return(paste("Fahrenheit:", temp, "is equivalent to", round(centigrade, 2), "centigrade."))
+  
+}
+
+# Test function
+far_to_cen(65)
+
+
+# ==== Question 3 ====
+
+# Vector of normally distributed data, of length 100, mean 35 and standard deviation of 15 
+some_data <- rnorm(n = 100, mean = 35, sd = 15)
+
+# Function to calculate mean, median, and range
+# This function will use other prexisting functions
+mean_med_range <- function(vect) {
+  
+  mean.val <- mean(vect) # Sample mean
+  median.val <- median(vect) # sample median
+  range.val <- range(vect) # range of vector values
+  
+  # Print calculated values w/ appropriate labels
+  print(
+    data.frame(
+    mean = mean.val,
+    median = median.val,
+    range = paste0(round(range.val, 2), 
+                   collapse = ", ")
+    )
+  )
+  
+  # plot a histogram (as a proportion) of the values and add a density curve
+  hist(x = some_data, freq = FALSE, 
+       ylim = c(0, 0.03))
+  lines(x = density(x = some_data), col = "red")
+    
+}
+
+# Test function
+mean_med_range(some_data)
+
+
+# ==== Question 4 ====
+
+# Function to calculate sample median
+samp_med <- function(vect) {
+  
+  # If vector has even sample size, add the 2 middle numbers, divide sum, return quotient as median value
+  if(length(vect) %% 2 == 0) {
+    
+    # Order vector ascending order
+    # *Remember* order returns reordered element indicies not the actual values
+    temp <- vect[order(vect, decreasing = FALSE)]
+    
+    # Take average of the middle two numbers in the vector and store as sample median
+    # even.med <- (temp[length(temp) / 2] + temp[(length(temp) / 2) + 1]) / 2
+    value <- (temp[length(temp) / 2] + temp[(length(temp) / 2) + 1]) / 2
+    
+    return(value)
+    
+  }
+  
+  # Otherwise, just return {(n + 1) ÷ 2}th value to find median
+  else {
+    
+    temp <- vect[order(vect, decreasing = FALSE)]
+    #index <- temp[(length(temp) + 1) / 2]
+    
+    return(temp[(length(temp) + 1) / 2])
+    # Return {i}th value in the set representing the median
+  }
+  
+}
+
+
+# Create vectors of integers of odd and even sizes to test your function
+some_data2 <- sample.int(n = 200, size = 115)
+some_data3 <- sample.int(n = 200, size = 100)
+
+# Test function
+identical(median(some_data2), samp_med(some_data2))
+identical(median(some_data3), samp_med(some_data3))
+# Functions return element index NOT the median value
+
+
+# ==== Question 5 ====
+
+# Define function for "Ricker model"
+# N_t+1 = N_t * exp[r(1 − N_t/K)]
+ricker <- function(nzero, r, t, K = 100) {
+  
+  # Empty list to store simulation values
+  temp <- list()
+  
+  # Calculate 1st simulated pop.size using initial pop.size and store as first item in list
+  pop <- nzero * exp(r * (1 - nzero / K))
+  temp[[1]] <- pop
+  
+  # Assign 1 as initial value for while-loop to increment for break statement
+  i <- 1
+  
+  # While-loop: Run Ricker model simulations for "t" specified number of times until i > t
+  while(i <= t){
+    
+    # Use previous pop. size in list to calculate next list time and store as next list item
+    temp[[i + 1]] <- temp[[i]] * exp(r * (1 - temp[[i]] / K))
+    
+    # Add 1 to i to create break statement (i + 1 after each loop iteration)
+    i <- i + 1
+    
+  }
+  
+  # Return list of values (estimated population sizes) from Ricker model
+  return(temp)
+  
+} # End of function definition
+
+# Test function
+ricker(4, 0.53, 7)
+
+
+
+# Delete all R objects made during Exercise 6
+rm(list = ls())
+```
+
+
+
+#### R Session Information
+```{r session}
+sessionInfo()
+xfun::session_info()
+```
+
+
+#### R Citation
+```{r citation}
+citation()
+```

@@ -1,0 +1,172 @@
+---
+title: "R for Data Science"
+author: "Earl Morales"
+date: "7/22/2020"
+output: html_document
+---
+
+[R for Data Science](https://r4ds.had.co.nz/index.html)
+
+```{r, message = FALSE}
+library(tidyverse)
+library(lubridate)
+```
+
+
+# Section 1: Explore
+
+## Chapter 3: Data Visualization Exercises
+- Include questions that are interesting and/or helpful to you
+- This section seems like review to me and provides some granular details about data viz w/ ggplot2
+  - Will likely skip this section
+```{r}
+# ==== 3.2.4 ====
+
+# Run ggplot(data = mpg). What do you see?
+# Ans: Nothing but an empty page 
+
+# How many rows are in mpg? How many columns?
+# 234 rows, 11 columns
+
+# What does the drv variable describe? Read the help for ?mpg to find out.
+# the type of drive train, where f = front-wheel drive, r = rear wheel drive, 4 = 4wd
+
+# Make a scatterplot of hwy vs cyl.
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = cyl, y = hwy))
+
+# What happens if you make a scatterplot of class vs drv? Why is the plot not useful?
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = class, y = drv))
+# A scatterplot is not produced because class and drv are categorical variables. This plot is not useful bc it does not show the number of vehicles that belong to class and drv, it only shows the type of vehicle and its various drive trains.
+
+
+
+# ==== 3.3.1 ====
+
+# Which variables in mpg are categorical? Which variables are continuous? (Hint: type ?mpg to read the documentation for the dataset). How can you see this information when you run mpg?
+# Answer: displ, year, cyl, cty, and hwy are continuous variables since they are numeric (i.e. integer or double) data types; the rest of the variables are technically categorical. "cyl" and "year" are techincally categorical variables since they are nominal.
+
+# Map a continuous variable to color, size, and shape. How do these aesthetics behave differently for categorical vs. continuous variables?
+ggplot(data = mpg) + geom_point(mapping = aes(x = displ, y = hwy, color = cty))
+ggplot(data = mpg) + geom_point(mapping = aes(x = displ, y = hwy, shape = drv))
+# Answer: The "shape" aesthetic can only be mapped with discrete, categorical variables. Similarly, discrete variables can't be mapped to "size" aesthetics. 
+# Depending on the variable data type, the aesthetics mapped will fall along a continuous scale or will map to category levels.
+
+# What happens if you map the same variable to multiple aesthetics?
+mpg %>% ggplot() + geom_point(mapping = aes(x = displ, y = cty, color = cty, size = cty))
+# Mapping the same variable to multiple aesthetics will make separate legends for each aesthetic; this is redundant and can make data viz more confusing. Mapping a variable to multiple aesthetics is different from layering plots and aesthetics.
+
+# What does the stroke aesthetic do? What shapes does it work with? (Hint: use ?geom_point)
+?geom_point
+ggplot(data = mpg) + geom_point(mapping = aes(x = displ, y = hwy), stroke = 4)
+# The stroke aesthetic modifies the width of the point border in geom_point, this is different than the "size" aesthetic
+
+# What happens if you map an aesthetic to something other than a variable name, like aes(colour = displ < 5)? Note, you’ll also need to specify x and y.
+ggplot(data = mpg) + geom_point(mapping = aes(x = hwy, y = cty, color = displ < 5))
+# Using a comparison operator results in a boolean value. In the example above, the color aesthetic will be mapped according to displacement values less than 5 or greater represented as TRUE or FALSE
+
+
+
+# ==== 3.5.1 ====
+
+# What happens if you facet on a continuous variable?
+ggplot(data = mpg) + geom_point(mapping = aes(x = displ, y = hwy)) + facet_wrap(facets = ~ cty)
+# Answer: Facets will be subsetted according to each value of the continuous variable
+
+
+
+# ==== 3.6.1 ====
+
+# Recreate the R code necessary to generate the following graphs.
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(color = "white", stroke = 5) +
+  geom_point(mapping = aes(color = drv), size = 3)
+# ^ This is the code for the final graph shown in number 6 of 3.6.1
+
+
+
+# ==== 3.7.1 ====
+
+# In our proportion bar chart, we need to set group = 1. Why? In other words what is the problem with these two graphs?
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, y = after_stat(prop)))
+# group = 1 results in separate bars for each cut
+
+
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = color, y = after_stat(prop)))#, group = color)) +
+  #scale_fill_brewer(palette = "Blues") # Single color palette for bars
+# group = color yields bars w/ heights mapped to proportion values along the y-axis.
+
+# The problem w/ these two graphs is that all the bars map to the same maximum y-value and thus are proportional (same bar heights). I think that setting "group" to 1 creates a bar representing the proportion for each diamond cut in the data set since a single proportion value mighe be calculated for the whole entire dataset.
+
+# "The group aesthetic is by default set to the interaction of all discrete variables in the plot. This choice often partitions the data correctly, but when it does not, or when no discrete variable is used in the plot, you will need to explicitly define the grouping structure by mapping group to a variable that has a different value for each group."
+
+# Source: https://ggplot2.tidyverse.org/reference/aes_group_order.html
+
+
+
+# ==== 3.9.1 ====
+
+# Turn a stacked bar chart into a pie chart using coord_polar()
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut, fill = color)) +
+  coord_polar()
+```
+
+
+
+## Chapter 5: Data Transformation Exercises
+```{r}
+#install.packages("nycflights13")
+library(nycflights13)
+
+# ==== 5.2.4 ====
+
+#Find all flights that:
+
+# Had an arrival delay of two or more hours
+flights %>% filter(arr_delay >= 120)
+# Flew to Houston (IAH or HOU)
+flights %>% filter(dest %in% c("IAH", "HOU"))
+# Were operated by United, American, or Delta
+flights %>% filter(carrier %in% c("UA", "AA", "DL"))
+# Departed in summer (July, August, and September)
+flights %>% filter(month == 7 | month == 8 | month == 9)
+# Arrived more than two hours late, but didn’t leave late
+flights %>% filter(arr_delay > 120 & dep_delay <= 0)
+# Were delayed by at least an hour, but made up over 30 minutes in flight
+flights %>% filter(dep_delay >= 60 & air_time > 30)
+# Departed between midnight and 6am (inclusive)
+flights %>% filter(between(dep_time, left = 0, right = 600))
+flights %>% filter(dep_time >= 0 & dep_time <= 600)
+
+# How many flights have a missing dep_time? What other variables are missing? What might these rows represent?
+flights %>% filter(is.na(dep_time))
+sum(is.na(flights$dep_time))
+# 8,255 flights have a missing departure time. dep_delay, arr_time, arr_delay, air_time and tailnum have missing values; which may represent flights that were scheduled but did not actually happen (cancelled flights?)
+
+
+
+# ==== 5.3.1 ====
+
+# How could you use arrange() to sort all missing values to the start? (Hint: use is.na()).
+arrange(.data = flights, desc(is.na(dep_time)))
+names(flights)[colSums(is.na(flights)) > 0] # Columns w/ missing values
+colSums(sapply(X = flights, FUN = is.na)) # Number of missing values in each column
+
+# Sort flights to find the most delayed flights. Find the flights that left earliest.
+flights %>% arrange(desc(dep_delay), desc(arr_delay))
+flights %>% arrange(dep_time, dep_delay) %>% head(12) # Flights that left the earliest
+
+# Sort flights to find the fastest (highest speed) flights.
+
+
+# Which flights travelled the farthest? Which travelled the shortest?
+
+
+# ==== 5.4.1 ====
+
+```
+
