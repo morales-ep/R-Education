@@ -501,12 +501,219 @@ rm(list = ls())
 
 
 ## Chapter 5
-- Ch.5 has the same exact exercise questions as Ch.4; thus, use ggplot instead of base R or lattice to complete exercise 
-**Note**: The online book refers to **ggplot2** exercise 4 as  *Exercise 5* based on  book chapter listing 
-```{r exercise 4 ggplot}
-# Read through Ch.5 before starting Exercise 5
-# Can skip Ch.5 for now and return another time
+- Ch.5 has the same exact exercise questions as Ch.4; thus, *use ggplot instead of base R or lattice to complete exercise* 
+  + **Note**: The online book refers to **ggplot2 Exercise 4** as *Exercise 5*
+```{r exercise4-ggplot}
+# Load ggplot2 package (not entire tidyverse)
+library(ggplot2)
 
+# ==== Question 4 ====
+
+# Import squid1.txt from local environment
+squid <- read.table(file = "data/raw_data/squid1.txt", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+# Check dataset's structure and summarize the data
+str(squid)
+summary(squid)
+# There are 519 observations and 13 variables
+
+# Recode 'year', 'month', and 'maturity.stage' variables as factors using an apply function
+squid[, c("year", "month", "maturity.stage")] <- lapply(X = squid[, c("year", "month", "maturity.stage")], FUN = factor)
+
+# Check coding of 'year', 'month', and 'maturity.stage' variables only in squid data
+str(squid[, c("year", "month", "maturity.stage")])
+# Variables successfully recoded as factors
+
+
+# ==== Question 5 ====
+
+# Check observations per month and year combination
+xtabs(formula = ~month + year, data = squid)
+# In 1989 there were 12 observations only for the month of December; in 1990 there were a total of 333 observations excluding the months of February and June; there were a total 174 observations in 1991 from January to July
+# We don't have data for each month in each year but 1990 had the most observations
+
+# Check observations by month, year, and maturity stage as a contingency table
+ftable(xtabs(formula = ~month + year + maturity.stage, data = squid))
+
+
+# ==== Question 6 ====
+
+# Create 4 separate dotplots (Cleveland dotplots) for 'DML', 'weight', 'nid.length', and 'ovary.weight' and save to R objects
+
+# ---- View solution to this question ----
+# ^ Solution produces scatterplots NOT dotplots since horizontal lines to mark order of data is not included SMH
+
+
+dot_DML <- ggplot(data = squid) +
+  geom_hline(mapping = aes(yintercept = as.numeric(rownames(squid))), 
+             color = "lightgrey", linetype = "dashed") +
+  geom_point(mapping = aes(x = DML, y = as.numeric(rownames(squid)))) +
+  labs(title = "Cleveland Dotplot of Squid DML",
+       y = "Order of Observations",
+       x = "DML") +
+  theme_classic()
+# Changed to horizontal lines bc it's easier to follow order of data; still difficult to tell order based on bars however
+# Dotplot changes when switching between vertical and horizontal line geoms (vline vs hline)
+# ---- ^ WARNING ^ ----
+
+
+dot_weight <- ggplot(data = squid) +
+  geom_hline(mapping = aes(yintercept = as.numeric(rownames(squid))), 
+             color = "lightgrey", linetype = "dashed") +
+  geom_point(mapping = aes(x = weight, y = as.numeric(rownames(squid)))) +
+  labs(title = "Cleveland Dotplot of Squid Weight",
+       y = "Order of Observations",
+       x = "Weight (kg)") +
+  theme_classic()
+# Not sure if weight is actually in kg; guessing bc authors are British
+
+
+dot_nid.length <- ggplot(data = squid) +
+  geom_hline(mapping = aes(yintercept = as.numeric(rownames(squid))), 
+             color = "lightgrey", linetype = "dashed") +
+  geom_point(mapping = aes(x = nid.length, y = as.numeric(rownames(squid)))) +
+  labs(title = "Cleveland Dotplot of Squid NID length",
+       y = "Order of Observations",
+       x = "NID Length") +
+  theme_classic()
+
+
+dot_ovary.weight <- ggplot(data = squid) +
+  geom_hline(mapping = aes(yintercept = as.numeric(rownames(squid))), 
+             color = "lightgrey", linetype = "dashed") +
+  geom_point(mapping = aes(x = ovary.weight, y = as.numeric(rownames(squid))), alpha = 1/2) +
+  labs(title = "Cleveland Dotplot of Squid Ovary Weight",
+       y = "Order of Observations",
+       x = "Ovary Weight (kg)") +
+  theme_classic()
+# Not sure if weight is actually in kg; guessing bc authors are British
+
+
+# ==== Question 7 ====
+
+# Verify index of outlying 'nid.length' value
+which(squid$nid.length > 400)
+squid$nid.length[11]
+
+# Update 11th value of 'nid.length'
+squid$nid.length[11] <- 43.2
+
+# Save updated 'nid.length' dotchart to R object
+dot_nid.length <- ggplot(data = squid) +
+  geom_hline(mapping = aes(yintercept = as.numeric(rownames(squid))), 
+             color = "lightgrey", linetype = 2) +
+  geom_point(mapping = aes(x = nid.length, y = as.numeric(rownames(squid)))) +
+  labs(title = "Cleveland Dotplot of Squid NID length",
+       y = "Order of Observations",
+       x = "NID Length") +
+  theme_classic()
+
+
+# ==== Question 8 ====
+
+# Create histograms for 'DML', 'weight', 'eviscerate.weight' and 'ovary.weight'
+
+hist_DML <- ggplot(mapping = aes(x = DML), data = squid) +
+  geom_histogram(color = "black")
+
+hist_weight <- ggplot(mapping = aes(x = weight), data = squid) +
+  geom_histogram(color = "black")
+
+hist_evis.weight <- ggplot(mapping = aes(x = eviscerate.weight), data = squid) +
+  geom_histogram(color = "black")
+
+hist_ovary <- ggplot(mapping = aes(x = ovary.weight), data = squid) +
+  geom_histogram(color = "black")
+
+# Load package to arrange gg objects on single page
+#library(gridExtra)
+
+# Place histograms on single page in grid formation
+# grid.arrange(hist_DML, hist_weight, hist_evis.weight, hist_ovary)
+
+
+# ==== Question 9 ====
+
+# Scatterplot of weight against DML, overlayed with a line graph
+qplot(x = DML, y = weight, data = squid, geom = c("point", "smooth"))
+# The relationship is positive with a nonlinear, exponential curve shape
+
+# Scatterplot log(weight) and DML
+qplot(x = DML, y = log(weight), data = squid, geom = c("point", "smooth"))
+# Graph now has a sqrt shape; still curved!
+
+# Scatterplot sqrt(weight) and DML
+qplot(x = DML, y = sqrt(weight), data = squid, geom = c("point", "smooth"))
+# Plot has slight curve on left-side "tail" but mostly linear throughout
+
+# Scatterplot of log(weight) and log(DML)
+qplot(x = log(DML), y = log(weight), data = squid, geom = c("point", "smooth"))
+# ^ This yields the most linear relationship, but is it an accurate depiction of the data?
+# Graph should be interpreted in the context of log-transformations for both predictor and outcome variables
+
+# Save log(weight) vs DML graph as pdf
+pdf(file = "output/figures/ggscatter_ex4.pdf")
+qplot(x = DML, y = sqrt(weight), data = squid, geom = c("point", "smooth"))
+
+# Turn off pdf graphics device
+dev.off()
+
+
+# ==== Question 10 ====
+
+# Boxplots of DML by Maturity Stage using qplot
+qplot(x = maturity.stage, y = DML, data = squid,
+      geom = "boxplot", xlab = "Squid Maturity Stage", ylab = "Dorsal Mantle Length")
+
+# Violin plot of DML by Maturity Stage using violin geom and draw lines at 25th, 50th, and 75th quantiles
+ggplot(data = squid) +
+  geom_violin(mapping = aes(x = maturity.stage, y = DML), fill = "pink", draw_quantiles = c(0.25, 0.5, 0.75)) +
+  geom_jitter(mapping = aes(x = maturity.stage, y = DML), width = 0.1, alpha = 0.5)
+
+
+# ==== Question 11 ====
+
+# Use facet_wrap or facet_grid to condition on a factor variable to make a conditional scatterplot
+qplot(x = DML, y = sqrt(weight), data = squid, alpha = 0.5, ylab = expression(sqrt(weight))) +
+  facet_wrap(facets = ~maturity.stage) +
+  labs(title = paste("Conditional Scatterplot of", expression(sqrt(weight)), "vs DML by Maturity Stage"))
+# It appears weight grows as DML increases as maturity stage advances; though, the trend at stages 3-5 look similar with the main difference being sample sizes of each maturity stage
+
+lattice::xyplot(x = sqrt(weight) ~ DML | maturity.stage, data = squid, xlab = "Dorsal Mantle Length", ylab = expression(sqrt(weight)), main = "Squid Weight against DML by Maturity Stage")
+# xyplot() is easier to interpret than coplot() but the latter explicitly tells you the conditioned variable; the same can be said for the ggplot2 equivalent
+
+
+# ==== Question 12 ====
+
+# Function to return points and geom_smooth
+# allow for the method to be changed
+my_fn <- function(data, mapping, method = "loess", ...){
+      p <- ggplot(data = data, mapping = mapping) + 
+        geom_point() + 
+        geom_smooth(method = method, ...)
+      p
+    }
+
+# Create pairs plot using GGally function ggpairs
+# Replace density curves in diagonal w/ histograms
+# Add a "smoother" in lower triangle
+GGally::ggpairs(data = squid[, c("DML", "weight", "eviscerate.weight", "ovary.weight", "nid.length", "nid.weight")], progress = FALSE, diag = list(continuous = "barDiag"), lower = list(continuous = my_fn))
+# Use wrap w/ 'my_fn' to change method ("lm" insteado of "loess" default for example)
+
+
+# ==== Question 13 ====
+
+# Scatterplot of DML on the x axis and ovary weight on the y axis using color to highlight points at each maturity stage
+qplot(x = DML, y = ovary.weight, data = squid, color = maturity.stage, alpha = 1/2) +
+  labs(title = "Squid Ovary Weight against Dorsal Mantle Weight by Maturity Stage",
+       y = "Ovary Weight",
+       color = "Maturity Stage") +
+  guides(alpha = "none") # Remove legend made by 'alpha' variable/argument
+
+
+
+# Remove all objects made during this exercise
+rm(list = ls())
 ```
 
 
