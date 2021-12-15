@@ -16,7 +16,7 @@ Use this R Markdown document to practice base R using [Intro to R](https://intro
 [R Manuals](https://cran.r-project.org/manuals.html)
 
 
-## Chapter 1
+## Chapter 1: Getting Started with R and RStudio
 Link to *Introduction to R* [Exercise 1](https://alexd106.github.io/intro2R/exercise_1.html)
 
 ```{r exercise 1}
@@ -68,7 +68,7 @@ rm(first_char)
 
 
 
-## Chapter 2
+## Chapter 2: Some R Basics
 ```{r exercise 2}
 
 # ==== Question 2 ====
@@ -183,7 +183,7 @@ rm(list = ls())
 
 
 
-## Chapter 3
+## Chapter 3: Data in R
 ```{r exercise 3}
 
 # ==== Question 5 ====
@@ -299,7 +299,7 @@ rm(list = ls())
 
 
 
-## Chapter 4
+## Chapter 4: Graphics with base R
 ```{r exercise 4}
 
 # ==== Question 4 ====
@@ -500,7 +500,7 @@ rm(list = ls())
 
 
 
-## Chapter 5
+## Chapter 5: Graphics with ggplot2
 - Ch.5 has the same exact exercise questions as Ch.4; thus, *use ggplot instead of base R or lattice to complete exercise* 
   + **Note**: The online book refers to **ggplot2 Exercise 4** as *Exercise 5*
 ```{r exercise4-ggplot}
@@ -718,7 +718,7 @@ rm(list = ls())
 
 
 
-## Chapter 6
+## Chapter 6: Simple Statistics in R
 ```{r exercise 5}
 
 # ==== Question 1 ====
@@ -927,7 +927,7 @@ rm(list = ls())
 
 
 
-## Chapter 7
+## Chapter 7: Programming in R
 - **Note**: *Exercise 6* is listed as *Exercise 7* in the online book
 ```{r exercise 6}
 
